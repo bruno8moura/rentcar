@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node ./seed",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
+    "faker": "^5.1.0",
     "git-commit-msg-linter": "^4.1.1",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.7",
