@@ -1,0 +1,10 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+export ASDF_DIR="$HOME/.asdf"
+export PATH="$ASDF_DIR/bin:$PATH"
+ 
+export NODE_DIR="$(asdf where nodejs)"
+export PATH="$NODE_DIR/bin:$PATH"
+
+.git/hooks/commit-msg $1

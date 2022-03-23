@@ -1,0 +1,30 @@
+{
+  "name": "projeto-final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "git-commit-msg-linter": "^4.1.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
+    "standard": "^16.0.4"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
+  }
+}
