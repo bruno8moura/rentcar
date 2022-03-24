@@ -53,14 +53,33 @@ describe('CarService Suite Tests', () => {
     expect(result).to.be.equal(expected)
   })
 
-  //   it('given a carCategory it should return an available car', async () => {
-  //     const car = mocks.validCar
-  //     const carCategory = Object.create(mocks.validCarCategory)
-  //     carCategory.ids = [car.id]
+  it('given a carCategory it should return an available car', async () => {
+    const car = mocks.validCar
+    const carCategory = Object.create(mocks.validCarCategory)
+    carCategory.carIds = [car.id]
 
-  //     const result = await carService.getAvailableCar(carCategory)
-  //     const expected = car
+    sandbox.stub(
+      carService.carRepository,
+      carService.carRepository.find.name
+    ).resolves(car)
 
-//     expect(result).to.be.deep.equal(expected)
-//   })
+    sandbox.spy(
+      carService,
+      carService.chooseRandomCar.name
+    )
+
+    const result = await carService.getAvailableCar(carCategory)
+    const expected = car
+
+    // eslint-disable-next-line no-unused-expressions
+    expect(carService.chooseRandomCar.calledOnce).to.be.ok
+
+    // eslint-disable-next-line no-unused-expressions
+    expect(carService.carRepository.find.calledOnce).to.be.ok
+
+    // eslint-disable-next-line no-unused-expressions
+    expect(carService.carRepository.find.calledWithExactly(car.id)).to.be.ok
+
+    expect(result).to.be.deep.equal(expected)
+  })
 })
