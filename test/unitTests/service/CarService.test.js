@@ -1,17 +1,17 @@
 const { describe, it, before, beforeEach, afterEach } = require('mocha')
-const CarService = require('../../src/service/CarService')
-const Transaction = require('../../src//entities/Transaction')
+const CarService = require('../../../src/service/CarService')
+const Transaction = require('../../../src/entities/Transaction')
 
 const { join } = require('path')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
-const carsDatabase = join(__dirname, './../../src/infra/database', 'cars.json')
+const carsDatabase = join(__dirname, '../../../src/infra/database', 'cars.json')
 
 const mocks = {
-  validCarCategory: require('../mocks/valid-carCategory.json'),
-  validCar: require('../mocks/valid-car.json'),
-  validCustomer: require('../mocks/valid-customer.json')
+  validCarCategory: require('../../mocks/valid-carCategory.json'),
+  validCar: require('../../mocks/valid-car.json'),
+  validCustomer: require('../../mocks/valid-customer.json')
 }
 describe('CarService Suite Tests', () => {
   let carService = {}
