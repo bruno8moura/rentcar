@@ -1,2 +1,5 @@
 node_modules
-_
+.eslintcache
+src/infra/database/*.json
+.nyc_output
+coverage
