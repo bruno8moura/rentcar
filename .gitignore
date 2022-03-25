@@ -3,3 +3,5 @@ node_modules
 src/infra/database/*.json
 .nyc_output
 coverage
+test/mocks/*.json
+
