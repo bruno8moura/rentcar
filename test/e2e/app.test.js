@@ -55,5 +55,13 @@ describe('API Suite Test', () => {
         .get('/rentcar/customers')
         .expect(200)
     })
+
+    it('should return a list when success listing customers', async () => {
+      const { body: { data } } = await request(app)
+        .get('/rentcar/customers')
+        .expect(200)
+      console.log(data)
+      assert.ok(Array.isArray(data), true)
+    })
   })
 })
