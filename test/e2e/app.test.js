@@ -48,4 +48,12 @@ describe('API Suite Test', () => {
       assert.ok(Object.keys(headers).includes(...Object.keys(expectedHeaders)))
     })
   })
+
+  describe('calling /rentcar/customers', () => {
+    it('should return http code status 200 when success listing customers', async () => {
+      await request(app)
+        .get('/rentcar/customers')
+        .expect(200)
+    })
+  })
 })
