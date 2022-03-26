@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "npx mocha --parallel test/**/**/*.test.js",
+    "test": "npx mocha --parallel 'test/**/*.test.js'",
     "test:watch": "npm run test -- -w",
     "test:cov": "npx nyc -- npm run test",
     "seed": "node ./src/infra/seed",
@@ -30,7 +30,8 @@
     "mocha": "^8.4.0",
     "nyc": "^15.1.0",
     "sinon": "^9.2.4",
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "supertest": "^6.2.2"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
