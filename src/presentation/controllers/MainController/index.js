@@ -25,7 +25,23 @@ class MainController extends Controller {
       return response.end(JSON.stringify(payload))
     }
 
-    response.write('ai...')
+    if (method === 'GET' && url === paths.customers) {
+      // eslint-disable-next-line no-unused-vars
+      const [_, listCustomersController] = this.controllers
+      const foundCustomers = await listCustomersController.execute()
+      response.writeHead(200, {
+        'Content-Type': 'application/json',
+        Location: paths.customers
+      })
+
+      const payload = {
+        data: foundCustomers
+      }
+
+      return response.end(JSON.stringify(payload))
+    }
+
+    response.writeHead(404)
     return response.end()
   }
 
