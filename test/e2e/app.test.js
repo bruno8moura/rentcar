@@ -18,5 +18,21 @@ describe('API Suite Test', () => {
 
       assert.ok(Array.isArray(data), true)
     })
+
+    it('should return a list of car category objects when success listing categories', async () => {
+      const { body: { data } } = await request(app)
+        .get('/rentcar/categories')
+        .expect(200)
+
+      const expectedProperties = [
+        'id',
+        'name',
+        'carIds',
+        'price'
+      ]
+
+      assert.ok(Array.isArray(data), true)
+      assert.deepStrictEqual(Object.keys(data[0]), expectedProperties)
+    })
   })
 })
