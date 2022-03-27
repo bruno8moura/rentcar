@@ -4,13 +4,15 @@ const ListCustomersController = require('./src/presentation/controllers/ListCust
 const CalculateRentPriceController = require('./src/presentation/controllers/CalculateRentPriceController')
 const MainController = require('./src/presentation/controllers/MainController')
 const GenerateReceiptRentController = require('./src/presentation/controllers/GenerateReceiptRentController')
+const AvailablesCarsController = require('./src/presentation/controllers/AvailablesCarsController')
 
 const mainController = new MainController({
   controllers: {
     listCategories: new ListCategoriesController(),
     listCustomers: new ListCustomersController(),
     calculateRentPrice: new CalculateRentPriceController(),
-    generateReceiptRent: new GenerateReceiptRentController()
+    generateReceiptRent: new GenerateReceiptRentController(),
+    availablesCarsController: new AvailablesCarsController()
   }
 })
 

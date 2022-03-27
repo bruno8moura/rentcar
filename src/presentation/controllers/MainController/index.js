@@ -89,6 +89,20 @@ class MainController extends Controller {
       return response.end(JSON.stringify(generatedReceipt))
     }
 
+    if (method === 'GET' && url.startsWith(paths.availables)) {
+      const urlInfo = new URL(url, `http://${request.headers.host}`)
+      const categoryId = urlInfo.searchParams.get('categoryId')
+
+      const { availablesCarsController } = this.controllers
+      const availableCars = await availablesCarsController.execute({ categoryId })
+      response.writeHead(200, {
+        'Content-Type': 'application/json',
+        Location: url
+      })
+
+      return response.end(`{ "data": ${JSON.stringify(availableCars)} }`)
+    }
+
     response.writeHead(404)
     return response.end()
   }
