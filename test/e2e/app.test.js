@@ -152,4 +152,28 @@ describe('API Suite Test', () => {
         assert.deepStrictEqual(Object.keys(result), expectedProperties)
       })
   })
+
+  describe('calling /rentcar/receipt', () => {
+    it('should list availables cars to rent and return http code status 200',
+      async () => {
+        const categoryId = mocks.validCarCategory.id
+
+        const requestedUrl = `/rentcar/availables?categoryId=${categoryId}`
+        const { headers, body: { data: result } } = await request(app)
+          .get(requestedUrl)
+          .expect(200)
+
+        const expectedHeaders = {
+          location: requestedUrl,
+          'content-type': 'application/json'
+        }
+
+        const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
+
+        const expectedProperties = ['id', 'name', 'releaseYear', 'available', 'gasAvailable']
+        assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
+        assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
+        assert.deepStrictEqual(Object.keys(result), expectedProperties)
+      })
+  })
 })
