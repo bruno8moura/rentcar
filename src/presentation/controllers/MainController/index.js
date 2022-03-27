@@ -57,6 +57,38 @@ class MainController extends Controller {
       return response.end(JSON.stringify(calculatedPrice))
     }
 
+    if (method === 'GET' && url.startsWith(paths.price)) {
+      const urlInfo = new URL(url, `http://${request.headers.host}`)
+      const customerId = urlInfo.searchParams.get('customerId')
+      const categoryId = urlInfo.searchParams.get('categoryId')
+      const numberOfTheDays = urlInfo.searchParams.get('days')
+
+      const { calculateRentPrice } = this.controllers
+      const calculatedPrice = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
+      response.writeHead(200, {
+        'Content-Type': 'application/json',
+        Location: url
+      })
+
+      return response.end(JSON.stringify(calculatedPrice))
+    }
+
+    if (method === 'GET' && url.startsWith(paths.receipt)) {
+      const urlInfo = new URL(url, `http://${request.headers.host}`)
+      const customerId = urlInfo.searchParams.get('customerId')
+      const categoryId = urlInfo.searchParams.get('categoryId')
+      const numberOfTheDays = urlInfo.searchParams.get('days')
+
+      const { generateReceiptRent } = this.controllers
+      const generatedReceipt = await generateReceiptRent.execute({ customerId, categoryId, numberOfTheDays })
+      response.writeHead(200, {
+        'Content-Type': 'application/json',
+        Location: url
+      })
+
+      return response.end(JSON.stringify(generatedReceipt))
+    }
+
     response.writeHead(404)
     return response.end()
   }
