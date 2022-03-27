@@ -94,7 +94,10 @@ describe('API Suite Test', () => {
         'content-type': 'application/json'
       }
 
-      assert.ok(Object.keys(headers).includes(...Object.keys(expectedHeaders)))
+      const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
+
+      assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
+      assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
     })
   })
 
