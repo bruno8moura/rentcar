@@ -115,9 +115,12 @@ describe('API Suite Test', () => {
           'content-type': 'application/json'
         }
 
+        const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
+
         const expectedProperties = ['price']
 
-        assert.ok(Object.keys(headers).includes(...Object.keys(expectedHeaders)))
+        assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
+        assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
         assert.deepStrictEqual(Object.keys(result), expectedProperties)
       })
   })

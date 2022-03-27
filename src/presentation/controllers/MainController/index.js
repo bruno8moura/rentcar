@@ -51,7 +51,7 @@ class MainController extends Controller {
       const foundCustomers = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
       response.writeHead(200, {
         'Content-Type': 'application/json',
-        Location: paths.customers
+        Location: url
       })
 
       const payload = {
