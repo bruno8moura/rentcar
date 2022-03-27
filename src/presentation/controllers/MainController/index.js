@@ -11,8 +11,8 @@ class MainController extends Controller {
     const { method, url } = request
 
     if (method === 'GET' && url === paths.categories) {
-      const [listCategoriesController] = this.controllers
-      const foundCategories = await listCategoriesController.execute()
+      const { listCategories } = this.controllers
+      const foundCategories = await listCategories.execute()
       response.writeHead(200, {
         'Content-Type': 'application/json',
         Location: paths.categories
@@ -27,8 +27,28 @@ class MainController extends Controller {
 
     if (method === 'GET' && url === paths.customers) {
       // eslint-disable-next-line no-unused-vars
-      const [_, listCustomersController] = this.controllers
-      const foundCustomers = await listCustomersController.execute()
+      const { listCustomers } = this.controllers
+      const foundCustomers = await listCustomers.execute()
+      response.writeHead(200, {
+        'Content-Type': 'application/json',
+        Location: paths.customers
+      })
+
+      const payload = {
+        data: foundCustomers
+      }
+
+      return response.end(JSON.stringify(payload))
+    }
+
+    if (method === 'GET' && url.startsWith(paths.price)) {
+      const urlInfo = new URL(url, `http://${request.headers.host}`)
+      const customerId = urlInfo.searchParams.get('customerId')
+      const categoryId = urlInfo.searchParams.get('categoryId')
+      const numberOfTheDays = urlInfo.searchParams.get('days')
+
+      const { calculateRentPrice } = this.controllers
+      const foundCustomers = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
       response.writeHead(200, {
         'Content-Type': 'application/json',
         Location: paths.customers
