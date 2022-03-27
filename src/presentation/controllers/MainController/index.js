@@ -1,3 +1,4 @@
+const { ok, notFound, error } = require('../../helpers/httpResponse')
 const paths = require('../../Paths')
 const Controller = require('../Controller')
 
@@ -7,125 +8,70 @@ class MainController extends Controller {
     this.controllers = controllers
   }
 
-  async handler (request, response) {
-    const { method, url } = request
-
-    if (method === 'GET' && url === paths.categories) {
-      const { listCategories } = this.controllers
-      const foundCategories = await listCategories.execute()
-      response.writeHead(200, {
-        'Content-Type': 'application/json',
-        Location: paths.categories
-      })
-
-      const payload = {
-        data: foundCategories
-      }
-
-      return response.end(JSON.stringify(payload))
-    }
-
-    if (method === 'GET' && url === paths.customers) {
-      // eslint-disable-next-line no-unused-vars
-      const { listCustomers } = this.controllers
-      const foundCustomers = await listCustomers.execute()
-      response.writeHead(200, {
-        'Content-Type': 'application/json',
-        Location: paths.customers
-      })
-
-      const payload = {
-        data: foundCustomers
-      }
-
-      return response.end(JSON.stringify(payload))
-    }
-
-    if (method === 'GET' && url.startsWith(paths.price)) {
-      const urlInfo = new URL(url, `http://${request.headers.host}`)
-      const customerId = urlInfo.searchParams.get('customerId')
-      const categoryId = urlInfo.searchParams.get('categoryId')
-      const numberOfTheDays = urlInfo.searchParams.get('days')
-
-      const { calculateRentPrice } = this.controllers
-      const calculatedPrice = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
-      response.writeHead(200, {
-        'Content-Type': 'application/json',
-        Location: url
-      })
-
-      return response.end(JSON.stringify(calculatedPrice))
-    }
-
-    if (method === 'GET' && url.startsWith(paths.price)) {
-      const urlInfo = new URL(url, `http://${request.headers.host}`)
-      const customerId = urlInfo.searchParams.get('customerId')
-      const categoryId = urlInfo.searchParams.get('categoryId')
-      const numberOfTheDays = urlInfo.searchParams.get('days')
-
-      const { calculateRentPrice } = this.controllers
-      const calculatedPrice = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
-      response.writeHead(200, {
-        'Content-Type': 'application/json',
-        Location: url
-      })
-
-      return response.end(JSON.stringify(calculatedPrice))
-    }
-
-    if (method === 'GET' && url.startsWith(paths.receipt)) {
-      const urlInfo = new URL(url, `http://${request.headers.host}`)
-      const customerId = urlInfo.searchParams.get('customerId')
-      const categoryId = urlInfo.searchParams.get('categoryId')
-      const numberOfTheDays = urlInfo.searchParams.get('days')
-
-      const { generateReceiptRent } = this.controllers
-      const generatedReceipt = await generateReceiptRent.execute({ customerId, categoryId, numberOfTheDays })
-      response.writeHead(200, {
-        'Content-Type': 'application/json',
-        Location: url
-      })
-
-      return response.end(JSON.stringify(generatedReceipt))
-    }
-
-    if (method === 'GET' && url.startsWith(paths.availables)) {
-      const urlInfo = new URL(url, `http://${request.headers.host}`)
-      const categoryId = urlInfo.searchParams.get('categoryId')
-
-      const { availablesCarsController } = this.controllers
-      const availableCars = await availablesCarsController.execute({ categoryId })
-      response.writeHead(200, {
-        'Content-Type': 'application/json',
-        Location: url
-      })
-
-      return response.end(`{ "data": ${JSON.stringify(availableCars)} }`)
-    }
-
-    response.writeHead(404)
-    return response.end()
-  }
-
-  handleError (error, response) {
-    if (error.message.includes('ENOENT')) {
-      // logger.warn(`asset not found ${error.stack}`)
-      console.log(`asset not found ${error.stack}`)
-      response.writeHead(404)
-
-      return response.end()
-    }
-
-    // logger.error(`caught error on API ${error.stack}`)
-    console.error(`caught error on API ${error.stack}`)
-    response.writeHead(500)
-
-    return response.end()
-  }
-
   async execute (request, response) {
-    return this.handler(request, response)
-      .catch(err => this.handleError(err, response))
+    const { method, url } = request
+    try {
+      if (method === 'GET' && url === paths.categories) {
+        const { listCategories } = this.controllers
+        const foundCategories = await listCategories.execute()
+        const { statusCode, headers, payload } = ok({ data: foundCategories, location: url })
+
+        return response.writeHead(statusCode, headers).end(payload)
+      }
+
+      if (method === 'GET' && url === paths.customers) {
+        // eslint-disable-next-line no-unused-vars
+        const { listCustomers } = this.controllers
+        const foundCustomers = await listCustomers.execute()
+        const { statusCode, headers, payload } = ok({ data: foundCustomers, location: url })
+
+        return response.writeHead(statusCode, headers).end(payload)
+      }
+
+      if (method === 'GET' && url.startsWith(paths.price)) {
+        const urlInfo = new URL(url, `http://${request.headers.host}`)
+        const customerId = urlInfo.searchParams.get('customerId')
+        const categoryId = urlInfo.searchParams.get('categoryId')
+        const numberOfTheDays = urlInfo.searchParams.get('days')
+
+        const { calculateRentPrice } = this.controllers
+        const calculatedPrice = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
+        const { statusCode, headers, payload } = ok({ data: calculatedPrice, location: url })
+
+        return response.writeHead(statusCode, headers).end(payload)
+      }
+
+      if (method === 'GET' && url.startsWith(paths.receipt)) {
+        const urlInfo = new URL(url, `http://${request.headers.host}`)
+        const customerId = urlInfo.searchParams.get('customerId')
+        const categoryId = urlInfo.searchParams.get('categoryId')
+        const numberOfTheDays = urlInfo.searchParams.get('days')
+
+        const { generateReceiptRent } = this.controllers
+        const generatedReceipt = await generateReceiptRent.execute({ customerId, categoryId, numberOfTheDays })
+        const { statusCode, headers, payload } = ok({ data: generatedReceipt, location: url })
+
+        return response.writeHead(statusCode, headers).end(payload)
+      }
+
+      if (method === 'GET' && url.startsWith(paths.availables)) {
+        const urlInfo = new URL(url, `http://${request.headers.host}`)
+        const categoryId = urlInfo.searchParams.get('categoryId')
+
+        const { availablesCarsController } = this.controllers
+        const availableCars = await availablesCarsController.execute({ categoryId })
+        const { statusCode, headers, payload } = ok({ data: availableCars, location: url })
+
+        return response.writeHead(statusCode, headers).end(payload)
+      }
+
+      const { statusCode, headers, payload } = notFound({ location: url })
+      return response.writeHead(statusCode, headers).end(payload)
+    } catch (e) {
+      console.error(e)
+      const { statusCode, headers, payload } = error({ location: url })
+      return response.writeHead(statusCode, headers).end(payload)
+    }
   }
 }
 

@@ -109,7 +109,7 @@ describe('API Suite Test', () => {
         const numberOfTheDays = 5
 
         const requestedUrl = `/rentcar/price?customerId=${customerId}&days=${numberOfTheDays}&categoryId=${categoryId}`
-        const { headers, body: result } = await request(app)
+        const { headers, body: { data: result } } = await request(app)
           .get(requestedUrl)
           .expect(200)
 
@@ -135,7 +135,7 @@ describe('API Suite Test', () => {
         const numberOfTheDays = 5
 
         const requestedUrl = `/rentcar/receipt?customerId=${customerId}&days=${numberOfTheDays}&categoryId=${categoryId}`
-        const { headers, body: result } = await request(app)
+        const { headers, body: { data: result } } = await request(app)
           .get(requestedUrl)
           .expect(200)
 
