@@ -3,6 +3,11 @@ const request = require('supertest')
 const app = require('../../index')
 const assert = require('assert')
 
+const mocks = {
+  validCarCategory: require('../mocks/valid-carCategory.json'),
+  validCustomer: require('../mocks/valid-customer.json')
+}
+
 describe('API Suite Test', () => {
   describe('calling /rentcar/categories', () => {
     it('should return http code status 200 when success listing categories', async () => {
@@ -60,7 +65,7 @@ describe('API Suite Test', () => {
       const { body: { data } } = await request(app)
         .get('/rentcar/customers')
         .expect(200)
-      console.log(data)
+
       assert.ok(Array.isArray(data), true)
     })
 
@@ -91,5 +96,29 @@ describe('API Suite Test', () => {
 
       assert.ok(Object.keys(headers).includes(...Object.keys(expectedHeaders)))
     })
+  })
+
+  describe('calling /rentcar/price', () => {
+    it('should calculate price based on customer id, category id and how many days the user wish keeping rent car',
+      async () => {
+        const customerId = mocks.validCustomer.id
+        const categoryId = mocks.validCarCategory.id
+        const numberOfTheDays = 5
+
+        const requestedUrl = `/rentcar/price?customerId=${customerId}&days=${numberOfTheDays}&categoryId=${categoryId}`
+        const { headers, body: { data: result } } = await request(app)
+          .get(requestedUrl)
+          .expect(200)
+
+        const expectedHeaders = {
+          location: requestedUrl,
+          'content-type': 'application/json'
+        }
+
+        const expectedProperties = ['price']
+
+        assert.ok(Object.keys(headers).includes(...Object.keys(expectedHeaders)))
+        assert.deepStrictEqual(Object.keys(result), expectedProperties)
+      })
   })
 })
