@@ -109,7 +109,7 @@ describe('API Suite Test', () => {
         const numberOfTheDays = 5
 
         const requestedUrl = `/rentcar/price?customerId=${customerId}&days=${numberOfTheDays}&categoryId=${categoryId}`
-        const { headers, body: { data: result } } = await request(app)
+        const { headers, body: result } = await request(app)
           .get(requestedUrl)
           .expect(200)
 
@@ -121,7 +121,32 @@ describe('API Suite Test', () => {
         const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
 
         const expectedProperties = ['price']
+        assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
+        assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
+        assert.deepStrictEqual(Object.keys(result), expectedProperties)
+      })
+  })
 
+  describe('calling /rentcar/receipt', () => {
+    it('should generate rent receipt based on customer id, category id and how many days the user wish keeping rent car',
+      async () => {
+        const customerId = mocks.validCustomer.id
+        const categoryId = mocks.validCarCategory.id
+        const numberOfTheDays = 5
+
+        const requestedUrl = `/rentcar/receipt?customerId=${customerId}&days=${numberOfTheDays}&categoryId=${categoryId}`
+        const { headers, body: result } = await request(app)
+          .get(requestedUrl)
+          .expect(200)
+
+        const expectedHeaders = {
+          location: requestedUrl,
+          'content-type': 'application/json'
+        }
+
+        const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
+
+        const expectedProperties = ['customer', 'car', 'amount', 'dueDate']
         assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
         assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
         assert.deepStrictEqual(Object.keys(result), expectedProperties)
