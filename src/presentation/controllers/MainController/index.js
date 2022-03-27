@@ -48,17 +48,13 @@ class MainController extends Controller {
       const numberOfTheDays = urlInfo.searchParams.get('days')
 
       const { calculateRentPrice } = this.controllers
-      const foundCustomers = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
+      const calculatedPrice = await calculateRentPrice.execute({ customerId, categoryId, numberOfTheDays })
       response.writeHead(200, {
         'Content-Type': 'application/json',
         Location: url
       })
 
-      const payload = {
-        data: foundCustomers
-      }
-
-      return response.end(JSON.stringify(payload))
+      return response.end(JSON.stringify(calculatedPrice))
     }
 
     response.writeHead(404)
