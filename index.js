@@ -5,15 +5,21 @@ const CalculateRentPriceController = require('./src/presentation/controllers/Cal
 const MainController = require('./src/presentation/controllers/MainController')
 const GenerateReceiptRentController = require('./src/presentation/controllers/GenerateReceiptRentController')
 const AvailablesCarsController = require('./src/presentation/controllers/AvailablesCarsController')
+const RoutesComposite = require('./src/presentation/operations/RoutesComposite')
+const CategoriesRoute = require('./src/presentation/operations/CategoriesRoute')
+const CustomersRoute = require('./src/presentation/operations/CustomersRoute')
+const AvailablesCarsRoute = require('./src/presentation/operations/AvailablesCarsRoute')
+const CalculateRentPriceRoute = require('./src/presentation/operations/CalculateRentPriceRoute')
+const GenerateReceiptRentRoute = require('./src/presentation/operations/GenerateReceiptRentRoute')
+const path = require('./src/presentation/Paths')
 
-const mainController = new MainController({
-  controllers: {
-    listCategories: new ListCategoriesController(),
-    listCustomers: new ListCustomersController(),
-    calculateRentPrice: new CalculateRentPriceController(),
-    generateReceiptRent: new GenerateReceiptRentController(),
-    availablesCarsController: new AvailablesCarsController()
-  }
-})
+const routes = {}
+routes[`GET:${path.categories}`] = new CategoriesRoute(new ListCategoriesController())
+routes[`GET:${path.customers}`] = new CustomersRoute(new ListCustomersController())
+routes[`GET:${path.price}`] = new CalculateRentPriceRoute(new CalculateRentPriceController())
+routes[`GET:${path.availables}`] = new AvailablesCarsRoute(new AvailablesCarsController())
+routes[`GET:${path.receipt}`] = new GenerateReceiptRentRoute(new GenerateReceiptRentController())
+
+const mainController = new MainController(new RoutesComposite(routes))
 
 module.exports = server(mainController.execute.bind(mainController))
