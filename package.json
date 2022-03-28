@@ -11,7 +11,8 @@
     "test:watch": "npm run test -- -w",
     "test:cov": "npx nyc -- npm run test",
     "seed": "node ./src/infra/seed",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
