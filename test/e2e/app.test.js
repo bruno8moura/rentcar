@@ -176,4 +176,26 @@ describe('API Suite Test', () => {
         assert.deepStrictEqual(Object.keys(result), expectedProperties)
       })
   })
+
+  describe('route doesnt exist', () => {
+    it('should return http status code 404',
+      async () => {
+        const requestedUrl = '/rentcar/inexistent'
+        const { headers, body: { data: result } } = await request(app)
+          .get(requestedUrl)
+          .expect(404)
+
+        const expectedHeaders = {
+          location: requestedUrl,
+          'content-type': 'application/json'
+        }
+
+        const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
+
+        const expectedPayload = { message: 'Resource not found: /rentcar/inexistent' }
+        assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
+        assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
+        assert.deepStrictEqual(result, expectedPayload)
+      })
+  })
 })
