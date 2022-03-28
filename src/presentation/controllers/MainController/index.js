@@ -13,12 +13,8 @@ class MainController extends Controller {
     try {
       const payloadToRoute = this._queryStringToJson(urlInfo.searchParams.toString())
       const data = await this.routesComposite.toRoute({ method, pathname: urlInfo.pathname, payload: payloadToRoute })
-      if (!data) {
-        const { statusCode, headers, payload } = notFound({ location: url })
-        return response.writeHead(statusCode, headers).end(payload)
-      }
 
-      const { statusCode, headers, payload } = ok({ data, location: url })
+      const { statusCode, headers, payload } = data ? ok({ data, location: url }) : notFound({ location: url })
       return response.writeHead(statusCode, headers).end(payload)
     } catch (e) {
       console.error(e)
