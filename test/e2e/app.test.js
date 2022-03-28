@@ -198,4 +198,25 @@ describe('API Suite Test', () => {
         assert.deepStrictEqual(result, expectedPayload)
       })
   })
+
+  it('should return http status code 500',
+    async () => {
+      const requestedUrl = '/rentcar/availables?categoryIdasdfadfadf?dfasdfad'
+      const { headers, body: { data: result } } = await request(app)
+        .get(requestedUrl)
+        .expect(500)
+
+      const expectedHeaders = {
+        location: requestedUrl,
+        'content-type': 'application/json'
+      }
+
+      console.log(result)
+      const checkExpectedItems = (allItems, receivedItens) => receivedItens.every(item => allItems.includes(item))
+
+      const expectedPayload = { message: 'Unexpected error happened. Please contact administrator' }
+      assert.ok(checkExpectedItems(Object.keys(headers), Object.keys(expectedHeaders)))
+      assert.ok(checkExpectedItems(Object.values(headers), Object.values(expectedHeaders)))
+      assert.deepStrictEqual(result, expectedPayload)
+    })
 })
